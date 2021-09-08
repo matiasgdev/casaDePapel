@@ -1,0 +1,45 @@
+----------------------------------------------------------------------
+Ejercicios para la clase #2
+----------------------------------------------------------------------
+
+voy a tener un servidor express
+voy a tener un endpoint '/cuenta'
+voy a contabilizar cuantas veces se invoca a hola
+
+cada 2 segundos se guarda en mysql (mysql2)
+y reseteo el contador
+
+insert (fecha, referencia, canthits)
+values (now(), 'cantidadhits', 3)
+
+---------------------------------------------------------------------
+
+const mysql = require('mysql2');
+
+let objConnection = {
+    host     : 'localhost',
+    user     : 'root',
+    password : '',
+    database : 'monitoreo'
+}
+
+    let connection = null;
+    connection = mysql.createConnection(objConnection);
+    connection.connect(err => {
+        if (err) {
+            console.log(err)
+            return;
+        }
+        console.log('connectado')
+
+        let strSQL = 'INSERT INTO eventos values (now(), "canthits", ?)'
+        connection.query(strSQL, [cantidadDeHits], (err, results)=>{
+            if (err) {
+                console.log(err)
+                return
+            }
+            console.log('insertado!!')
+            connection.end()
+        })
+    })
+}
