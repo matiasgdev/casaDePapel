@@ -5,7 +5,12 @@ const _ = require('underscore')
 
 let idx = 0
 
-usuariosRouter.use('/usuario', (req, res, next) => {
+usuariosRouter.use('/api/usuario', (req, res, next) => {
+    res.setHeader('Content-Type', 'application/json')
+    next()
+})
+
+usuariosRouter.use('/api/usuario', (req, res, next) => {
     // Supongamos que ante alguna circumstancia
     // no se puede seguir adelante para entrar
     // en el get de /usuario
@@ -18,7 +23,7 @@ usuariosRouter.use('/usuario', (req, res, next) => {
     next()
 })
 
-usuariosRouter.use('/usuario', (req, res, next) => {
+usuariosRouter.use('/api/usuario', (req, res, next) => {
     if (idx % 2 === 0) {
         res.status(500).send(JSON.stringify({error:'Server error'}))
         return
@@ -39,7 +44,7 @@ usuariosRouter.route('/api/usuario')
         throw new Error('POST NO PERMITIDO !!!!')
     })
 
-usuariosRouter.use('/usuario', (err, req, res, next) => {
+usuariosRouter.use('/api/usuario', (err, req, res, next) => {
     res.status(res.mistatus).send(err)
 })
 
