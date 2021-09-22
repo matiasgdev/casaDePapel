@@ -2,7 +2,11 @@
 Ejercicios para la clase #2
 ----------------------------------------------------------------------
 
-https://grafana.com/
+Voy a realizar una Route que sea POST /api/login
 
-Instalar grafana y jugar con los graficos
+y de venir con un { usuario:'max', password: 'max33RedBull' } 
+
+en ese caso, voy a darle un ok, logueado 200 OK
+en caso contrario voy darle un 401 Unauthorized
+
 
