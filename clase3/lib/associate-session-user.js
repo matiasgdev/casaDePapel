@@ -1,28 +1,28 @@
 const uuid = require('uuid')
 const client = require('./redis-client')
 
-
 function associateSessionUser(user) {
-  if (!user)
+  if (!user) {
     throw new Error('Debes asociar un usuario')
-  
-  return Promise.resolve((resolve, rejects) => {
+  }
+
+  return new Promise((resolve, rejects) => {
     const id = uuid.v4()
-    
+
     client.set(id, user, (err) => {
       if (err) {
           console.log(err)
           rejects('Server error')
       }
-      
+
       client.quit(()=>{
         resolve(id)
       })
-      
+
     })
 
   })
-  
+
 }
 
 

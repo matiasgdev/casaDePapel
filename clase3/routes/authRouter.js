@@ -27,6 +27,9 @@ authRouter.use('/', (req, res, next) => {
 
 authRouter.route('/api/login')
     .post(async (req, res) => {
+        // Traer de redis el usuario max validar password
+        // si todo coincide, le entrego el token
+        console.log(req.body)
         const tokenId = await associateSessionUser(req.body.username)
         res.status(200).json({token: tokenId })
     })

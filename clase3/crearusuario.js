@@ -36,7 +36,6 @@ let usuarioJson = JSON.stringify(usuarioCompleto)
 
 console.log(usuarioJson)
 
-
 client.set('max', usuarioJson, (err) => {
     if (err) {
         console.log(err)
