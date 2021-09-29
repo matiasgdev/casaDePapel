@@ -1,6 +1,7 @@
 const express = require('express')
+const associateSessionUser = require('../lib/associate-session-user')
 const authRouter = express.Router()
-const uuid = require('uuid')
+
 
 authRouter.use('/', (req, res, next) => {
     console.log('voy a verificar si se dirije a login o bien tien un token')
@@ -25,8 +26,9 @@ authRouter.use('/', (req, res, next) => {
 // genero un uuid y lo pongo en redis
 
 authRouter.route('/api/login')
-    .post((req, res) => {
-        res.status(200).json({token: 'token generado'})
+    .post(async (req, res) => {
+        const tokenId = await associateSessionUser(req.body.username)
+        res.status(200).json({token: tokenId })
     })
 
 module.exports = authRouter
