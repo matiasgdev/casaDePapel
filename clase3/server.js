@@ -2,14 +2,17 @@ let express = require('express')
 let path = require('path')
 let usuariosRouter = require('./routes/usuariosRouter')
 let authRouter = require('./routes/authRouter')
+const jwtdecode = require('jwt-decode')
 
 let app = express()
 app.use(express.json())
 app.use(express.static(path.join(__dirname, '/public/')))
 {
     let rutaUnderscore = path.join(__dirname, './node_modules/underscore/underscore.js')
+    let rutajwtdecode = path.join(__dirname, './node_modules/jwt-decode/build/jwt-decode.js')
     //console.log(rutaUnderscore)
     app.use('/underscore', express.static(rutaUnderscore))
+    app.use('/jwtdecode', express.static(rutajwtdecode))
 }
 
 app.use((req, res, next)=>{
