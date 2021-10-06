@@ -1,0 +1,35 @@
+----------------------------------------------------------------------
+1) Ejercicios balanceo de carga
+----------------------------------------------------------------------
+
+Un server.js con express que reciba como parametro el puerto
+obviamente que abra ese puerto, y cuando le hago un get
+me retorna: "Soy el servidor que corre en puerto z"
+
+----------------------------------------------------------------------
+2) IC Integracion continua
+----------------------------------------------------------------------
+
+Experimental.
+
+Utilizando el api de github, ver cada n segundos si hubo algun commit
+si lo hubo hacer un clone --depth=1 y relanzar el proceso que se esta
+ejecutando.
+
+1) ejecutar un api de github y ver si hay nuevos commits
+   curl https://api.github.com/repos/arteysoft/ic/commits
+
+----------------------------------------------------------------------
+3) Trabajo de investigacion
+----------------------------------------------------------------------
+
+Sincronizar un proyecto local con un servidor remoto
+https://stackoverflow.com/questions/13698043/observe-file-changes-with-node-js/13698113
+
+Lo que intente hasta ahora utilia rsync que NO esta disponible en windows.
+
+La idea es utilizar el fs.watch para ver si hay cambios y si los hay
+sincronizar con el servidor remoto.
+
+
+
