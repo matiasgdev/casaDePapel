@@ -1,21 +1,13 @@
-let {exec} = require('child_process')
-let path = require('path')
+let { exec } = require('child_process')
+let path = require('path');
+const asyncExec = require('./async-exec');
 
-nombreCarpeta = '101';
+let nombreCarpeta = require('../package.json').version
 
-function crearCarpeta() {
-    return new Promise((resolve, reject) => {
-        let workingFolder = [__dirname, nombreCarpeta].join('')
-        let comando = ['mkdir', nombreCarpeta].join(' ')
+const repo = process.argv[2]
 
-        exec(comando, {  cdw: __dirname }, (err, stdout, stderr) => {
-            if (err) {
-                reject(err)
-                return
-            }
-            resolve()
-        })
-    })
+async function crearCarpeta() {
+    return await asyncExec(`mkdir ${nombreCarpeta}`, { cwd: __dirname })
 }
 
 function clonarRepo() {
@@ -36,6 +28,7 @@ function clonarRepo() {
 
 function apagarServidor() {
     return new Promise((resolve, reject) => {
+        // asyncExec('curl localhost:3000/close')
         // hay un endpoint que es /close
     })
 }
@@ -43,6 +36,7 @@ function apagarServidor() {
 function encenderServidor() {
     return new Promise((resolve, reject) => {
         let workingFolder = path.resolve(__dirname, nombreCarpeta, 'ic')
+
         let comando = 'node server.js'
         exec(comando, { cwd: workingFolder }, (err, stdout, stderr) => {
             if (err) {
@@ -56,6 +50,6 @@ function encenderServidor() {
 
 (async function () {
     await crearCarpeta()
-    await clonarRepo()
-    await encenderServidor()
+    // await clonarRepo()
+    // await encenderServidor()
 })()

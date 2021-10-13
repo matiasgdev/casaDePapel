@@ -1,57 +1,64 @@
-let {exec} = require('child_process')
+const asyncExec = require('./async-exec')
 
-let listaCommits = []
+// /arteysoft/ic
+let repo = process.argv[2] || "arteysoft/ic"
+let commitsCacheados = [];
+let hits = 0;
+
+if (!repo) {
+    throw new Error("Debes asignar un repositorio");
+}
 
 function pausa() {
     return new Promise((resolve) => {
-        setTimeout(resolve, 5000)
-    })
+        setTimeout(resolve, 5000);
+    });
 }
 
-function verificarCommits() {
-    return new Promise((resolve, reject) => {
-        let comando = 'curl -u abcde:abcde https://api.github.com/repos/arteysoft/ic/commits'
-        exec(comando, (err, stdout, stderr) => {
-            if (err) {
-                reject(err)
-                return
-            }
-            if (stderr) {
-            }
-            try {
-                let objJson = JSON.parse(stdout)
-                let arrRet = objJson.map(z => z.sha)
-                resolve(arrRet)
-            }
-            catch (err) {
-                reject(err)
-            }
-        })
-    })
+async function verificarCommits() {
+    let comando = `curl -u abcde:abcde https://api.github.com/repos/${repo}/commits`;
+
+    const { stdout } = await asyncExec(comando);
+
+    let json = JSON.parse(stdout);
+
+    let commits = Array.isArray(json)
+        ? json.map((z) => z.sha)
+        : json["sha"];
+    
+
+    return commits;
 }
 
-(async function() {
-    listaCommits = await verificarCommits()
+(async function () {
+    commitsCacheados = await verificarCommits();
     for (;;) {
-        await pausa()
+        await pausa();
         try {
-            let nuevosCommits = await verificarCommits()
-            console.log('Nuevos commits')
-            console.log(nuevosCommits)
-            console.log('Commits historicos')
-            console.log(listaCommits)
-            console.log()
-            if (nuevosCommits.length > listaCommits) {
-                console.log('DISPARANDO PROCESO !!!!!')
+            let date = new Date().toLocaleString();
+            let commits = await verificarCommits();
+
+            if (hits && commits.length === commitsCacheados.length) {
+                console.log("No hay actualizaciones", date);
+            } else {
+                console.log("Commits historicos");
+                console.log(commitsCacheados);
+                console.log("Nuevos commits");
+                console.log(commits);
+                console.log();
+            }
+
+            if (commits.length > commitsCacheados.length) {
+                console.log("DISPARANDO PROCESO !!!!!");
+                // process.exit()
                 // disparar un proceso para clonar el siguiente commit
                 // asignar a listaCommits el nuevosCommits
             }
-        }
-        catch (err) {
-            console.log('se produjo un error')
-            console.log(err)
-            console.log()
+
+            hits++;
+        } catch (err) {
+            console.log("se produjo un error");
+            console.log(err);
         }
     }
-
-})()
+})();

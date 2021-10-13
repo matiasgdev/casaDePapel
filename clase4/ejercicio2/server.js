@@ -12,7 +12,6 @@ app.get('/close', (req, res) => {
     res.status(200).send('ok')
     srv.close(() => {
         console.log('closing')
-
     })
 })
 
